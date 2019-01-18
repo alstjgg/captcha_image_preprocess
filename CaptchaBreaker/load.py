@@ -22,3 +22,16 @@ def get_image(path):
     loaded_image = cv2.cvtColor(loaded_image, cv2.COLOR_BGR2GRAY)
     label = ((path.split('/')[-1]).split('\\')[-1]).split('.')[0]
     return loaded_image, label
+
+
+# Determine if input is link or path & return image
+def determine(which):
+    try:
+        image = gather(which)
+    except:
+        try:
+            image, label = get_image(which)
+        except:
+            print('Wrong input. Pulling image from default link')
+            image = gather('http://www.gov.kr/captcha')
+    return image

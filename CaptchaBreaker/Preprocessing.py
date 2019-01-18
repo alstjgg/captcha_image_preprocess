@@ -10,7 +10,7 @@ def bw(original_image):
     t3 = original_image[original_image.shape[0]-1][0]
     t4 = original_image[original_image.shape[0]-1][original_image.shape[1]-1]
     t = min(t1, t2, t3, t4)
-    if t == 255:
+    if t > 250:
         bw_img = cv2.adaptiveThreshold(original_image, 255,
                                        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                        cv2.THRESH_BINARY, 15, 2)

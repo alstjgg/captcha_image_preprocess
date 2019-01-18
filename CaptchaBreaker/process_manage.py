@@ -78,7 +78,7 @@ def choose_process():
 def show_rate():
     current_path = os.path.dirname(__file__)
     print('* Current path = ' + current_path)
-    print('Enter path of data')
+    print('Enter path of dataset')
     while True:
         try:
             data_path = input()
@@ -102,7 +102,7 @@ def show_rate():
                 if processed_image.text[i] == label[i]:
                     letter_correct += 1
         except:
-            print(label)
+            print('Error occured in processing image ', label)
 
         print('\r{0: .2f}% complete..'.format((count*100) / total), end='')
 
@@ -113,3 +113,5 @@ def show_rate():
     print('\tOut of {0} captcha images, {1} were correctly read.'
           'Success Rate: {2:.2f}%'
           .format(total, correct, (correct * 100) / total))
+    print('Press any key to continue.')
+    input()
