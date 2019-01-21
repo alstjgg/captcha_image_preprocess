@@ -300,47 +300,7 @@ _with kernel_size = (2, 4)_
 
 
 # Code Structure
-```uml
-
-CaptchaBreaker <|-- process_manage
-CaptchaBreaker <|-- testProcess
-CaptchaBreaker <|-- load
-process_manage <|-- Preprocessing
-
-class CaptchaBreaker{
-    menu()
-    init
-    }
-    
-class process_manage{
-    class Result
-    choose_process()
-    process()
-    show_rate()
-    }
-   
-class testProcess{
-    test_binarisation()
-    test_morphology()
-    test_blur()
-    }
-
-class Preprocessing {
-    bw()
-    crop_image()
-    morph_image()
-    blur_image()
-    return_image()
-    tesseract()
-    }
-    
-class load{
-    gather()
-    get_image()
-    determine()
-    }
-```
-
+![CodeStructure](https://goo.gl/fZK7Je)
 # Success Rate Analysis
 ## Test cases
 - Page Segmentation Mode에 따라
