@@ -350,3 +350,136 @@ _with kernel_size = (2, 4)_
 
 ![1.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/13-1.png)
 ![3.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/13-2.png)
+
+# 추가 - argparse
+## argparse
+### 1. parser 만들기
+### `parser = argparse.ArgumentParser()`
+- prog=None
+    - sys.argv[0]
+    - 프로그램의 이름
+- usage=None
+    - 프로그램의 사용 방법 (어떤 인자를 전달할 것인가에 대한 옵션 등)
+- description=None
+    - 프로그램에 대한 간략한 설명
+    - 옵션 위에 표시됨
+- epilog=None
+    - 프로그램에 대한 추가 설명
+    - 옵션 뒤에 표시됨
+- parents=[]
+    - 다른 파서와 인자 공유
+- formatter_class=argparse.HelpFormatter
+    - class argparse.RawDescriptionHelpFormatter -> 줄바꿈이나 인덴트가 이상해도 그대로 출력
+    - class argparse.RawTextHelpFormatter
+    - class argparse.ArgumentDefaultsHelpFormatter -> 인자 정보 중 default 값에 대한 정보도 함께 출력
+    - class argparse.MetavarTypeHelpFormatter -> 인자 설명 대한 정보 대신 type 정보를 출력
+- prefix_chars='-'
+    - '-'와 같이 명령 옵션의 접두어로 사용할 문자 설정
+- fromfile_prefix_chars=None
+- argument_default=None
+- conflict_handler='error'
+- add_help=True
+    - `-h`나 `--h`를 사용하여 옵션을 출력할때, `-h`, `--help` 옵션은 출력되지 않음
+- allow_abbrev=True
+
+### 2. 인자 추가하기
+### `parser.add_argument()`
+- name or flags
+    - 선택 인자인지, 위치 인자인지 결정
+    - `-f`의 경우 선택 인자, `bar`의 경우 위치 인자 -> 접두사 `-`로 구별
+- action
+    - `store` -> 인자 값 저장
+        - `store_const` -> `const` 인자에 인자 값 저장
+        - `store_true`, `store_false` -> 주어진 인자에 `True` 또는 `False` 저장
+    - `append`
+        - 인자 값을 리스트에 추가 -> 옵션을 여러번 지정할 수 있음
+        - `append_const`
+    - `count`
+        - 키워드 인자의 수를 세림 -> 상세도 증가
+    - `help` -> 자동 추가
+    - `version`
+        - `add_argument`에서 지정된 `version=` 값을 출력
+- nargs -> 소비되어야 하는 명령행 인자의 수
+    - `N` -> 정수 리스트
+    - `?`
+    - `*` -> 모든 명령행 인자를 리스트에 저장
+    - `+`
+    - `argparse.REMAINDER` -> 남은 명령행 인자를 리스트에 저장
+- const
+    - `store_const`와 `append_const` action을 사용할 때 무조건 사용
+- default -> 인자가 명령행에 없는 경우 생성되는 값
+    - `argparse.SUPPRESS`의 경우 인자가 없으면 값 추가 안함
+- type
+    - 기본으로 `str`
+    - `int`, `float`, `open`, 또는 직접 만든 형으로 변환 가능
+- choices -> 값이 허용된 선택지 내인지 검사 (`typ`과 일치해야함)
+- required -> 필수인 옵션 표시(`=True`)
+- help - 인자가 하는 일에 대한 간단한 설명
+- metavar -> 사용 메시지에 사용되는 인자의 이름 변경
+- dest -> 인자를 어디에 저장할지 선택
+
+### 3. 기타 유용한 기능
+### `ArgumentParser.add_subparsers()`
+-> 특정 명령에 대한 부속 명령
+### `ArgumentParser.add_argument_group()`
+-> 'optional arguments'와 'positional arguments' 외에 더 적절한 인자 그룹이 있는 경우 생성
+
+### 4. 인자 파싱하기
+### `args = parser.parse_args()`
+- 인자 없이 호출 -> sys.argv에서 자동으로 인자 결정
+
+***
+## CaptchaBreaker 프로그램에 맞는 인자 선택
+### 1. Operation -> positional
+1. Preprocess image
+2. Show success rate for dataset
+3. Test Binarisation
+4. Test Morphology
+5. Test Blurring
+### 2. Path/Link -> optional
+- Path to data or link to image
+### 3. Processing Order -> optional
+1. Binarisation
+2. Cropping
+3. Closing
+4. Blurring
+
+## 적용
+- main source code for applying argparse
+```python
+import argparse
+
+parser = argparse.ArgumentParser(description='Preprocess Captcha images', formatter_class=argparse.RawTextHelpFormatter)
+
+parser.add_argument('option', type=int, choices=range(1, 6), help=option_help)
+parser.add_argument('--path', dest='path', default='http://www.gov.kr/captcha', help=path_help + '\n(default: %(default)s)')
+parser.add_argument('--order', dest='order', default='1234', help=order_help + '\n(default: %(default)s)')
+
+args = parser.parse_args()
+```
+- 실행 화면
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-1.png)
+- operation must be chosen (1, 2, 3, 4, 5)
+- path and order are optional arguments -> default is given
+    - for operation 2(computing success rate), path to dataset must be given
+### Examples
+- `python CaptchaBreaker.py 1` : operation 1 with no optional arguments
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-2.png)
+    -> Process random image from default link in default processing order(binarise -> crop -> close -> blur)
+- `python CaptchaBreaker.py 1 --order 132` : operation 1 with order arugment
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-3.png)
+    -> Process random image from default link in given processing order(binarise -> close -> crop)
+- `python Captchabreaker.py 2 --path \Users\argos\PycharmProjects\CaptchaBreak\images --order 123` : operation 2 with path and order arguments
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-4.png)
+    -> Process images given in dataset by path in given processing order(binarse -> crop -> close), and print recognition success rate
+- `python Captchabreaker.py 3 --path \Users\argos\PycharmProjects\CaptchaBreak\images\003369.png` : operation 3 with path argument
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-5.png)
+    -> Test binarisation on given image
+### Other examples
+- `python CaptchaBreaker.py 2` : operation 2 without path to dataset
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-6.png)
+    -> error due to empty dataset
+- `python CaptchaBreaker.py 4 --order 13483` : operation 4 with order argument
+![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-7.png)
+    -> no error. the program will operate successfully while ignoring the order argument
+
