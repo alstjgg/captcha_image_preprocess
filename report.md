@@ -470,21 +470,27 @@ args = parser.parse_args()
 ### Examples
 - `python CaptchaBreaker.py 1` : operation 1 with no optional arguments
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-2.png)
-    -> Process random image from default link in default processing order(binarise -> crop -> close -> blur)
+
+-> Process random image from default link in default processing order(binarise -> crop -> close -> blur)
 - `python CaptchaBreaker.py 1 --order 132` : operation 1 with order arugment
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-3.png)
-    -> Process random image from default link in given processing order(binarise -> close -> crop)
+
+-> Process random image from default link in given processing order(binarise -> close -> crop)
 - `python Captchabreaker.py 2 --path \Users\argos\PycharmProjects\CaptchaBreak\images --order 123` : operation 2 with path and order arguments
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-4.png)
-    -> Process images given in dataset by path in given processing order(binarse -> crop -> close), and print recognition success rate
+
+-> Process images given in dataset by path in given processing order(binarse -> crop -> close), and print recognition success rate
 - `python Captchabreaker.py 3 --path \Users\argos\PycharmProjects\CaptchaBreak\images\003369.png` : operation 3 with path argument
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-5.png)
-    -> Test binarisation on given image
+
+-> Test binarisation on given image
 ### Other examples
 - `python CaptchaBreaker.py 2` : operation 2 without path to dataset
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-6.png)
-    -> error due to empty dataset
+
+-> error due to empty dataset
 - `python CaptchaBreaker.py 4 --order 13483` : operation 4 with order argument
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-7.png)
-    -> no error. the program will operate successfully while ignoring the order argument
+
+-> no error. the program will operate successfully while ignoring the order argument
 
