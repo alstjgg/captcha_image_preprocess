@@ -449,15 +449,20 @@ _with kernel_size = (2, 4)_
 ```python
 import argparse
 
-parser = argparse.ArgumentParser(description='Preprocess Captcha images', formatter_class=argparse.RawTextHelpFormatter)
+parser = argparse.ArgumentParser(description='Preprocess Captcha images',
+                                formatter_class=argparse.RawTextHelpFormatter)
 
-parser.add_argument('option', type=int, choices=range(1, 6), help=option_help)
-parser.add_argument('--path', dest='path', default='http://www.gov.kr/captcha', help=path_help + '\n(default: %(default)s)')
-parser.add_argument('--order', dest='order', default='1234', help=order_help + '\n(default: %(default)s)')
+parser.add_argument('option', type=int, choices=range(1, 6),
+                    help=option_help)
+parser.add_argument('--path', dest='path', default='http://www.gov.kr/captcha',
+                    help=path_help + '\n(default: %(default)s)')
+parser.add_argument('--order', dest='order', default='1234',
+                    help=order_help + '\n(default: %(default)s)')
 
 args = parser.parse_args()
 ```
 - 실행 화면
+
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/14-1.png)
 - operation must be chosen (1, 2, 3, 4, 5)
 - path and order are optional arguments -> default is given
