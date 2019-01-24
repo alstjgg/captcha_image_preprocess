@@ -8,6 +8,8 @@ Break simple captcha with image preprocessing using openCV on python with tesser
 
 [Command line version](#command-line-version)
 
+[Further report](/report.md)
+
 # Interactive Version
 ![image.png](https://github.com/alstjgg/captcha_image_preprocess/blob/master/doc_image/01%20Functions.png)
 ## 1. Preprocess image
