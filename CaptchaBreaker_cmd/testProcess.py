@@ -4,6 +4,11 @@ from matplotlib import pyplot as plt
 
 # Test image binarisation
 def test_binarisation(given_image):
+    """Show 3 types of binarisation methods on given image.
+
+    :param given_image: original image to be binarised
+    :return: none
+    """
     # Simple Thresholding + Binary(Threshold = 125)
     thresh, binary = cv2.threshold(given_image, 125, 255,
                                    cv2.THRESH_BINARY)
@@ -27,6 +32,11 @@ def test_binarisation(given_image):
 
 # Test morphology
 def test_morphology(given_image):
+    """Show 3 types of morphology on given image.
+
+    :param given_image: original image to be dilated, eroded, and closed
+    :return: none
+    """
     shape = cv2.MORPH_RECT
     kernel_size = (2, 4)
     kernel = cv2.getStructuringElement(shape, kernel_size)
@@ -45,6 +55,11 @@ def test_morphology(given_image):
 
 # Test blur
 def test_blur(given_image):
+    """Show 4 types of blurring on given image.
+
+    :param given_image: original image to be blurred
+    :return: none
+    """
     average = cv2.blur(given_image, (5, 5))
     gaussian = cv2.GaussianBlur(given_image, (5, 5), 0)
     median = cv2.medianBlur(given_image, 5)

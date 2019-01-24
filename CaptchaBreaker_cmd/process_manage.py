@@ -7,11 +7,21 @@ from load import get_image_path
 
 class Result:
     def __init__(self, order, images, text):
+        """Store processing order, images, and text recognized by tesseract.
+
+        :param order: list of preprocessing functions in processed order
+        :param images: list of images in processed order
+        :param text: text recognized by tesseract
+        """
         self.order = order
         self.images = images
         self.text = text
 
     def show(self):
+        """Show processing steps with titles and images in order.
+
+        :return: none
+        """
         titles = ['Original']
         images = [self.images[0]]
         for i in range(4):
@@ -45,9 +55,32 @@ class Result:
         plt.show()
 
 
+def get_order(sel_order):
+    """Return list of processing functions in given order.
+
+    :param sel_order: order of processing in string of integers
+    :return: list of processing functions
+    """
+    steps = [Preprocessing.bw, Preprocessing.crop_image,
+             Preprocessing.morph_image, Preprocessing.blur_image]
+    order = []
+    for i in range(4):
+        try:
+            order.append(steps[int(sel_order[i]) - 1])
+        except:
+            order.append(Preprocessing.return_image)
+    return order
+
+
 # define preprocessing (종류와 순서 결정)
 def process(original_image, sel_order):
-    order = choose_process(sel_order)
+    """Create Result class with original image and processing order.
+
+    :param original_image: original image before any processing
+    :param sel_order: string of integers indicating processing order
+    :return: Result class
+    """
+    order = get_order(sel_order)
     images = [original_image]
     images.append(order[0](original_image))
     images.append(order[1](images[1]))
@@ -57,28 +90,21 @@ def process(original_image, sel_order):
     return Result(order, images, text)
 
 
-# Select processes
-def choose_process(get_order):
-    steps = [Preprocessing.bw, Preprocessing.crop_image,
-             Preprocessing.morph_image, Preprocessing.blur_image]
-    order = []
-
-    for i in range(4):
-        try:
-            order.append(steps[int(get_order[i]) - 1])
-        except:
-            order.append(Preprocessing.return_image)
-    return order
-
-
 # Compute and display success rate for images in given path
-def show_rate(path, order):
+def show_rate(path, sel_order):
+    """Show success rate of text recognition of given dataset and process order
+
+    :param path: local directory to dataset(image + label)
+    :param sel_order: string of integers indicating processing order
+    :return: none
+    """
     try:
         total = len(fnmatch.filter(os.listdir(path), '*.png'))
     except:
         print('Path error. Try again.')
         raise SystemExit
 
+    order = get_order(sel_order)
     count = letter_correct = correct = 0
     for f in glob.glob(path + '/*.png'):
         count += 1
