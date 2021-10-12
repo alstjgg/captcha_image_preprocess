@@ -6,7 +6,7 @@ idna==2.8
 kiwisolver==1.0.1
 matplotlib==3.0.2
 numpy==1.16.0
-opencv-python==4.0.0.21
+opencv-python==4.1.1.26
 Pillow==5.4.1
 post==2018.11.20
 public==2018.11.20
